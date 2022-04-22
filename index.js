@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 
 const initApp = () => {
@@ -19,11 +20,11 @@ const mainQuestion = () => {
         .then(({ main }) => {
             switch (main) {
                 case 'View all departments':
-                    return
+                    return getDepartments()
                 case 'View all roles':
-                    return
+                    return getRoles()
                 case 'View all employees':
-                    return
+                    return getEmployees()
                 case 'Add Department':
                     return addDepartment()
                 case 'Add Role':
@@ -36,6 +37,33 @@ const mainQuestion = () => {
         });
 };
 
+const getDepartments = () =>
+    fetch('/api/departments', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
+)
+
+
+const getRoles = () =>
+  fetch('/api/roles', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
+const getEmployees = () =>
+  fetch('/api/employees', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+);
 
 const addDepartment = () => {
     return inquirer.prompt([
@@ -43,7 +71,6 @@ const addDepartment = () => {
             type: 'input',
             name: 'department',
             message: 'What is the name of the department you wish to add?'
-
         }
     ])
         .then(department => console.log(department))
@@ -66,7 +93,7 @@ const addRole = () => {
             type: 'list',
             name: 'department_id',
             message: 'What department are they part of?',
-            choices: ['1', '2', '3', '4']
+            choices: ['Sales', 'Accounting', 'Warehouse', 'HR']
         }
     ])
         .then(role => console.log(role))
@@ -88,12 +115,12 @@ const addEmployee = () => {
         {
             type: 'list',
             name: 'role',
-            message: 'What is their role id?',
-            choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+            message: 'What is their role?',
+            choices: ['Lead Salesman', 'Sr Salesman', 'Jr Salesman', 'Accountant Manager', 'Accountant', 'Warehouse Supervisor', 'Warehouse Clerk', 'HR Manager', 'HR Representative']
         }
     ])
-    .then(employee => console.log(employee))
-    .then(mainQuestion)
+        .then(employee => console.log(employee))
+        .then(mainQuestion)
 }
 
 initApp();
