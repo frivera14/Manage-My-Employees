@@ -1,4 +1,4 @@
-INSERT INTO department (name)
+INSERT INTO departments (name)
     VALUES
     ('Sales'),
     ('Accounting'),
@@ -17,14 +17,14 @@ INSERT INTO roles (title, salary, department_id)
     ('HR Manager', 47000, 4),
     ('HR Representative', 40000, 4);
 
-INSERT INTO employees (first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id)
     VALUES
-    ('Dwight K.', 'Schrute', 11, 11),
-    ('James', 'Halpert', 12, NULL),
-    ('Andrew', 'Bernard', 14, NULL),
-    ('Angela', 'Martin', 21, 21),
-    ('Kevin', 'Malone', 22, NULL),
-    ('Darryl', 'Philbin', 31, 31),
-    ('Roy', 'Smith', 32, NULL),
-    ('Toby', 'Flenderson', 41, 41),
-    ('Holly', 'Flax', 42, NULL);
+    ('Dwight K.', 'Schrute', 1),
+    ('James', 'Halpert', 2),
+    ('Andrew', 'Bernard', 3),
+    ('Angela', 'Martin', 4),
+    ('Kevin', 'Malone', 5),
+    ('Darryl', 'Philbin', 6),
+    ('Roy', 'Smith', 7),
+    ('Toby', 'Flenderson', 8),
+    ('Holly', 'Flax', 9);
