@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const cTable = require('console.table');
+const db = require('./db/connection');
 
 
 const initApp = () => {
@@ -9,7 +9,7 @@ const initApp = () => {
 
 
 const mainQuestion = () => {
-    return inquirer.prompt([
+     inquirer.prompt([
         {
             type: 'list',
             name: 'main',
@@ -34,36 +34,21 @@ const mainQuestion = () => {
                 default:
                     break;
             }
-        });
+        })
 };
 
-const getDepartments = () =>
-    fetch('/api/departments', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-)
+const getDepartments = () => {
+    const sql = `SELECT * FROM departments`;
+  
+    db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(400).json({ error: err.message })
+        return;
+      }
+      console.table(rows);
 
-
-const getRoles = () =>
-  fetch('/api/roles', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
-
-const getEmployees = () =>
-  fetch('/api/employees', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-);
+    })
+};
 
 const addDepartment = () => {
     return inquirer.prompt([
@@ -123,5 +108,6 @@ const addEmployee = () => {
         .then(mainQuestion)
 }
 
-initApp();
 
+
+initApp();
