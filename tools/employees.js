@@ -1,59 +1,47 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../../db/connection');
+const db = require('../db/connection');
+const inquirer = require('inquirer');
 
-router.get('/employees', (req, res) => {
+
+const getEmployees = () => {
     const sql = `SELECT * FROM employees`;
-  
+
     db.query(sql, (err, rows) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      res.json({
-        message: 'success',
-        data: rows
-      });
+
+        console.table(rows)
     });
-  });
+}
 
-
-  router.post('/employees', ({ body }, res) => {
-    const sql = `INSERT INTO employees (first_name, last_name, role_id) VALUE (?, ?, ?)`
-    const params = [body.firstName, body.lastName, body.role_id]
-
-    db.query(sql, params, (err, res) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
+const addEmployee = () => {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'What is their first name?'
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'What is their last name?'
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: 'What is their department?',
+            choices: ['Sales', 'Accounting', 'Warehouse', 'HR']
         }
-        res.json({
-            message: 'success',
-            data: body
-        });
-    });
-});
+    ])
+        .then(newbie => {
+            const sql = `INSERT INTO employees (first_name, last_name, employee_department) VALUE (?, ?, ?)`;
+            const params = [newbie.firstName, newbie.lastName, newbie.role]
 
-router.put('/employees/:id', (req, res) => {
-    const sql = `UPDATE employees SET role_id = ?
-                WHERE id = ? `;
-    const params = [req.body.role_id, req.params.id];
+            db.query(sql, params, (err, rows) => {
 
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-        } else if (!result.affectedRows) {
-            res.json({
-                message: 'Employee not found'
+                console.log('Added!');
             });
-        } else {
-            res.json({
-                message: 'success',
-                data: req.body,
-                changes: result.affectedRows
-            });
-        }
-    });
-} );
+        })
+}
 
-module.exports = router;
+
+
+
+module.exports = { getEmployees, addEmployee };

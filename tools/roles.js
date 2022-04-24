@@ -1,35 +1,45 @@
+const db = require('../db/connection')
+const inquirer = require('inquirer');
 
-const db = require('../../db/connection');
 
-router.get('/roles', (req, res) => {
+const getRoles = () => {
     const sql = `SELECT * FROM roles`;
-
+  
     db.query(sql, (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
+
+      console.table(rows);
+    })
+};
+
+const addRoles = () => {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What role would you like to add?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary?'
+        },
+        {
+            type: 'list',
+            name: 'department_id',
+            message: 'What department are they part of?',
+            choices: ['Sales', 'Accounting', 'Warehouse', 'Human Resources']
         }
-        res.json({
-            message: 'success',
-            data: rows
+    ])
+    .then((newbie) => {
+        const sql = `INSERT INTO roles (title, salary, department_name) VALUE (?, ?, ?)`;
+        const params = [newbie.title, newbie.salary, newbie.department_id]
+    
+        db.query(sql, params, (err, rows) => {
+            console.log('Added!')
         });
-    });
-});
+    })
+};
 
-router.post('/roles', ({ body }, res) => {
-    const sql = `INSERT INTO roles (title, salary, department_id) VALUE (?, ?, ?)`;
-    const params = [body.title, body.salary, body.department_id]
 
-    db.query(sql, params, (err, res) => {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
-        res.json({
-            message: 'success',
-            data: body
-        });
-    });
-});
 
-module.exports = router;
+module.exports = { getRoles, addRoles };

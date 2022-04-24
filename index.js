@@ -1,15 +1,28 @@
 const inquirer = require('inquirer');
-const db = require('./db/connection');
+const { addDepartment, getDepartments } = require('./tools/departments');
+const { getEmployees, addEmployee } = require('./tools/employees');
+const { getRoles, addRoles } = require('./tools/roles');
 
-
-const initApp = () => {
-    console.log('Welcome!')
-    return mainQuestion()
+function initApp() {
+    return inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'what',
+            message: 'Ready to manage?',
+            default: false
+        }
+    ])
+    .then(answer => {
+        if (answer.what) {
+            mainQuestion()
+        } else{
+            console.log('Goodbye!')
+        }
+    })
 }
 
-
 const mainQuestion = () => {
-     inquirer.prompt([
+    return inquirer.prompt([
         {
             type: 'list',
             name: 'main',
@@ -28,86 +41,32 @@ const mainQuestion = () => {
                 case 'Add Department':
                     return addDepartment()
                 case 'Add Role':
-                    return addRole()
+                    return addRoles()
                 case 'Add Employee':
                     return addEmployee()
                 default:
                     break;
             }
         })
+        .then(verifyQues)
 };
 
-const getDepartments = () => {
-    const sql = `SELECT * FROM departments`;
-  
-    db.query(sql, (err, rows) => {
-      if (err) {
-        res.status(400).json({ error: err.message })
-        return;
-      }
-      console.table(rows);
-
+const verifyQues = () => {
+    return inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'keep',
+            message: 'Looking to do more?',
+            default: false
+        }
+    ])
+    .then(answer => {
+        if (answer.keep) {
+            mainQuestion()
+        } else {
+            console.log('Goodbye!')
+        }
     })
-};
-
-const addDepartment = () => {
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'department',
-            message: 'What is the name of the department you wish to add?'
-        }
-    ])
-        .then(department => console.log(department))
-        .then(mainQuestion)
 }
-
-const addRole = () => {
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'title',
-            message: 'What role would you like to add?'
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: 'What is the salary?'
-        },
-        {
-            type: 'list',
-            name: 'department_id',
-            message: 'What department are they part of?',
-            choices: ['Sales', 'Accounting', 'Warehouse', 'HR']
-        }
-    ])
-        .then(role => console.log(role))
-        .then(mainQuestion)
-}
-
-const addEmployee = () => {
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'firstName',
-            message: 'What is their first name?'
-        },
-        {
-            type: 'input',
-            name: 'lastName',
-            message: 'What is their last name?'
-        },
-        {
-            type: 'list',
-            name: 'role',
-            message: 'What is their role?',
-            choices: ['Lead Salesman', 'Sr Salesman', 'Jr Salesman', 'Accountant Manager', 'Accountant', 'Warehouse Supervisor', 'Warehouse Clerk', 'HR Manager', 'HR Representative']
-        }
-    ])
-        .then(employee => console.log(employee))
-        .then(mainQuestion)
-}
-
-
 
 initApp();

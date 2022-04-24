@@ -5,26 +5,26 @@ INSERT INTO departments (name)
     ('Warehouse'),
     ('HR');
 
-INSERT INTO roles (title, salary, department_id)
+INSERT INTO roles (title, salary, department_name)
     VALUES
-    ('Lead Salesman', 50000, 1),
-    ('Sr Salesman', 40000, 1),
-    ('Jr Salesman', 30000, 1),
-    ('Accountant Manager', 45000, 2),
-    ('Accountant', 35000, 2),
-    ('Warehouse Supervisor', 45000, 3),
-    ('Warehouse Clerk', 37000, 3),
-    ('HR Manager', 47000, 4),
-    ('HR Representative', 40000, 4);
+    ('Lead Salesman', 50000, 'Sales'),
+    ('Sr Salesman', 40000, 'Sales'),
+    ('Jr Salesman', 30000, 'Sales'),
+    ('Accountant Manager', 45000, 'Accounting'),
+    ('Accountant', 35000, 'Accounting'),
+    ('Warehouse Supervisor', 45000, 'Warehouse'),
+    ('Warehouse Clerk', 37000, 'Warehouse'),
+    ('HR Manager', 47000, 'Human Resources'),
+    ('HR Representative', 40000, 'Human Resources');
 
-INSERT INTO employees (first_name, last_name, role_id)
+INSERT INTO employees (first_name, last_name, employee_department)
     VALUES
-    ('Dwight K.', 'Schrute', 1),
-    ('James', 'Halpert', 2),
-    ('Andrew', 'Bernard', 3),
-    ('Angela', 'Martin', 4),
-    ('Kevin', 'Malone', 5),
-    ('Darryl', 'Philbin', 6),
-    ('Roy', 'Smith', 7),
-    ('Toby', 'Flenderson', 8),
-    ('Holly', 'Flax', 9);
+    ('Dwight K.', 'Schrute', 'Sales'),
+    ('James', 'Halpert', 'Sales'),
+    ('Andrew', 'Bernard', 'Sales'),
+    ('Angela', 'Martin', 'Accounting'),
+    ('Kevin', 'Malone', 'Accounting'),
+    ('Darryl', 'Philbin', 'Warehouse'),
+    ('Roy', 'Smith', 'Warehouse'),
+    ('Toby', 'Flenderson', 'HR'),
+    ('Holly', 'Flax', 'HR');
